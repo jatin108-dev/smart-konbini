@@ -6,6 +6,7 @@ const {
   signupUser,
   loginUser,
   getCurrentUser,
+  logoutUser
 } = require("../controllers/authController");
 
 const authMiddleware = require("../middleware/authMiddleware");
@@ -23,6 +24,12 @@ router.get(
   "/me",
   authMiddleware,
   getCurrentUser
+);
+
+// LOGOUT CURRENT USER
+router.post(
+  "/logout",
+  logoutUser
 );
 
 
