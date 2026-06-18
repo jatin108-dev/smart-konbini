@@ -1,6 +1,7 @@
 import { motion } from "framer-motion";
-import { Link } from "react-router-dom";
-
+import { Link, useNavigate } from "react-router-dom";
+import { useState } from "react";
+import axios from "axios";
 import { useLanguage } from "../context/LanguageContext";
 import { translations } from "../data/translations";
 
@@ -9,6 +10,57 @@ const Login = () => {
   const { language, toggleLanguage } = useLanguage();
 
   const t = translations[language];
+
+  const navigate = useNavigate();
+
+const [formData, setFormData] = useState({
+  email: "",
+  password: "",
+});
+
+const [loading, setLoading] = useState(false);
+const [error, setError] = useState("");
+
+const handleChange = (e) => {
+  setFormData({
+    ...formData,
+    [e.target.name]: e.target.value,
+  });
+};
+
+const handleSubmit = async (e) => {
+  e.preventDefault();
+
+  try {
+
+    setLoading(true);
+    setError("");
+
+    const response = await axios.post(
+      "http://localhost:5000/api/auth/login",
+      formData,
+      {
+        withCredentials: true,
+      }
+    );
+
+    if (response.data.success) {
+      navigate("/");
+    }
+
+  } catch (error) {
+
+    setError(
+      error.response?.data?.message ||
+      "Login failed"
+    );
+
+  } finally {
+
+    setLoading(false);
+
+  }
+};
 
   return (
     <main className="min-h-screen bg-[#f6f1eb] flex items-center justify-center px-5 py-10 font-['Outfit'] overflow-hidden relative">
@@ -126,7 +178,10 @@ const Login = () => {
           </p>
 
           {/* FORM */}
-          <div className="mt-10 space-y-5">
+          <form
+  onSubmit={handleSubmit}
+  className="mt-10 space-y-5"
+>
 
             {/* EMAIL */}
             <div>
@@ -141,6 +196,9 @@ const Login = () => {
 
               <input
                 type="email"
+                name="email"
+                value={formData.email}
+                onChange={handleChange}
                 placeholder={
                   language === "en"
                     ? "you@example.com"
@@ -164,6 +222,9 @@ const Login = () => {
 
               <input
                 type="password"
+                name="password"
+                value={formData.password}
+                onChange={handleChange}
                 placeholder={
                   language === "en"
                     ? "Enter your password"
@@ -187,16 +248,26 @@ const Login = () => {
 
             </div>
 
+            {error && (
+               <p className="text-red-500 text-sm">
+               {error}
+               </p>
+             )}
+
             {/* BUTTON */}
-            <button className="w-full bg-[#111111] text-white py-4 rounded-[20px] hover:scale-[1.02] transition shadow-lg text-lg font-medium">
+      <button
+              type="submit"
+              disabled={loading}
+              className="w-full bg-[#111111] text-white py-4 rounded-[20px] hover:scale-[1.02] transition shadow-lg text-lg font-medium"
+>
+            {loading
+             ? "Signing In..."
+             : language === "en"
+             ? "Sign In"
+             : "ログイン"}
+      </button>
 
-              {language === "en"
-                ? "Sign In"
-                : "ログイン"}
-
-            </button>
-
-          </div>
+          </form>
 
           {/* FOOTER */}
           <p className="mt-8 text-center text-[#666]">
