@@ -21,7 +21,7 @@ const authMiddleware = async (req, res, next) => {
 
     const user = await User
       .findById(decoded.id)
-      .select("-password");
+      .select("name email role");
 
     req.user = user;
 
