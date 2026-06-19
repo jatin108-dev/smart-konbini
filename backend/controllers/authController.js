@@ -33,17 +33,23 @@ const signupUser = async (req, res) => {
       { expiresIn: "7d" }
     );
 
+    res.cookie("token", token, {
+    httpOnly: true,
+    secure: false,
+    sameSite: "lax",
+    maxAge: 7 * 24 * 60 * 60 * 1000,
+   });
+
     return res.status(201).json({
-      success: true,
-      message: "User created successfully",
-      token,
-      user: {
-        id: newUser._id,
-        name: newUser.name,
-        email: newUser.email,
-        role: newUser.role,
-      },
-    });
+    success: true,
+    message: "Account created successfully",
+    user: {
+    id: newUser._id,
+    name: newUser.name,
+    email: newUser.email,
+    role: newUser.role,
+  },
+});
 
   } catch (error) {
 

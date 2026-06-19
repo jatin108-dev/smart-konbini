@@ -1,11 +1,68 @@
 import { motion } from "framer-motion";
-import { Link } from "react-router-dom";
-
+import { Link, useNavigate } from "react-router-dom";
+import { useState } from "react";
 import { useLanguage } from "../context/LanguageContext";
+import axios from "axios";
 
 const Signup = () => {
 
   const { language, toggleLanguage } = useLanguage();
+
+
+  const navigate = useNavigate();
+
+const [formData, setFormData] = useState({
+  name: "",
+  email: "",
+  password: "",
+});
+
+const [loading, setLoading] = useState(false);
+const [error, setError] = useState("");
+
+const handleChange = (e) => {
+  setFormData({
+    ...formData,
+    [e.target.name]: e.target.value,
+  });
+};
+
+const handleSubmit = async (e) => {
+  e.preventDefault();
+
+  try {
+
+    setLoading(true);
+    setError("");
+
+    const response = await axios.post(
+  "http://localhost:5000/api/auth/signup",
+  formData,
+         {
+           withCredentials: true,
+         }
+    );
+
+    if (response.data.success) {
+
+      navigate("/");
+
+    }
+
+  } catch (error) {
+
+    setError(
+      error.response?.data?.message ||
+      "Signup failed"
+    );
+
+  } finally {
+
+    setLoading(false);
+
+  }
+
+};
 
   return (
     <main className="min-h-screen bg-[#f6f1eb] flex items-center justify-center px-5 py-10 font-['Outfit'] overflow-hidden relative">
@@ -123,7 +180,7 @@ const Signup = () => {
           </p>
 
           {/* FORM */}
-          <div className="mt-10 space-y-5">
+          <form onSubmit={handleSubmit} className="mt-10 space-y-5" >
 
             {/* NAME */}
             <div>
@@ -137,6 +194,9 @@ const Signup = () => {
               </p>
 
               <input
+              name="name"
+                value={formData.name}
+                onChange={handleChange}
                 type="text"
                 placeholder={
                   language === "en"
@@ -160,8 +220,11 @@ const Signup = () => {
               </p>
 
               <input
-                type="email"
-                placeholder={
+               name="email"
+               value={formData.email}
+               onChange={handleChange}
+               type="email"
+               placeholder={
                   language === "en"
                     ? "you@example.com"
                     : "メールを入力"
@@ -183,6 +246,9 @@ const Signup = () => {
               </p>
 
               <input
+                name="password"
+                value={formData.password}
+                onChange={handleChange}
                 type="password"
                 placeholder={
                   language === "en"
@@ -194,16 +260,27 @@ const Signup = () => {
 
             </div>
 
-            {/* BUTTON */}
-            <button className="w-full bg-[#111111] text-white py-4 rounded-[20px] hover:scale-[1.02] transition shadow-lg text-lg font-medium">
+            {error && (
+               <p className="text-red-500 text-sm">
+               {error}
+               </p>
+            )}
 
-              {language === "en"
-                ? "Create Account"
-                : "アカウント作成"}
+            {/* BUTTON */}
+            <button
+              type="submit"
+              disabled={loading}
+              className="w-full bg-[#111111] text-white py-4 rounded-[20px] hover:scale-[1.02] transition shadow-lg text-lg font-medium">
+
+              {loading
+              ? "Creating..."
+              : language === "en"
+              ? "Create Account"
+              : "アカウント作成"}
 
             </button>
 
-          </div>
+          </form>
 
           {/* FOOTER */}
           <p className="mt-8 text-center text-[#666]">
