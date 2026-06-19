@@ -43,6 +43,8 @@ const signupUser = async (req, res) => {
     return res.status(201).json({
     success: true,
     message: "Account created successfully",
+    
+    
     user: {
     id: newUser._id,
     name: newUser.name,
