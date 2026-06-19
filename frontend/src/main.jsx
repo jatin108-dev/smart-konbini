@@ -4,11 +4,14 @@ import App from "./App";
 import "./index.css";
 
 import { LanguageProvider } from "./context/LanguageContext";
+import { AuthProvider } from "./context/AuthContext";
 
 ReactDOM.createRoot(document.getElementById("root")).render(
   <React.StrictMode>
+  <AuthProvider>
     <LanguageProvider>
       <App />
     </LanguageProvider>
-  </React.StrictMode>
+  </AuthProvider>
+</React.StrictMode>
 );

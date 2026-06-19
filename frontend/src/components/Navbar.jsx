@@ -2,12 +2,33 @@ import { Link } from "react-router-dom";
 
 import { useLanguage } from "../context/LanguageContext";
 import { translations } from "../data/translations";
+import { useNavigate } from "react-router-dom";
+import { useAuth } from "../context/AuthContext";
 
 const Navbar = () => {
 
   const { language, toggleLanguage } = useLanguage();
 
   const t = translations[language];
+
+  // FOR PAGE REDIRECTION
+  const navigate = useNavigate();
+
+  // GET USER DATA AND LOGOUT FUNCTION
+// FROM GLOBAL AUTH CONTEXT
+      const {
+         user,
+         logout,
+      } = useAuth();
+
+      // Handle User LOGOut
+      const handleLogout = async () => {
+
+       await logout();
+
+      // REDIRECT TO LOGIN PAGE
+       navigate("/login");
+      };
 
   return (
     <nav className="absolute top-0 left-0 w-full z-50 px-5 md:px-20 py-6 flex justify-between items-center">
@@ -64,17 +85,44 @@ const Navbar = () => {
         </button>
 
         {/* LOGIN */}
-        <Link to="/login">
+      {user ? (
 
-          <button className="bg-[#111111] text-white px-5 md:px-6 py-3 rounded-full text-sm hover:scale-105 transition shadow-lg">
+  <div className="flex items-center gap-3">
 
-            {language === "en"
-              ? "Sign In"
-              : "ログイン"}
+  {/* LOGGED IN USER */}
+  <div className="bg-white border border-[#e8ddd2] px-4 py-3 rounded-full text-sm font-medium shadow-sm">
 
-          </button>
+    {user.name}
 
-        </Link>
+  </div>
+
+  {/* LOGOUT BUTTON */}
+  <button
+    onClick={handleLogout}
+    className="bg-red-500 text-white px-5 md:px-6 py-3 rounded-full text-sm hover:bg-red-600 transition shadow-lg"
+  >
+
+    Logout
+
+  </button>
+
+</div>
+
+) : (
+
+  <Link to="/login">
+
+    <button className="bg-[#111111] text-white px-5 md:px-6 py-3 rounded-full text-sm hover:scale-105 transition shadow-lg">
+
+      {language === "en"
+        ? "Sign In"
+        : "ログイン"}
+
+    </button>
+
+  </Link>
+
+)}
 
       </div>
 

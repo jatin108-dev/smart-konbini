@@ -4,6 +4,7 @@ import { useState } from "react";
 import axios from "axios";
 import { useLanguage } from "../context/LanguageContext";
 import { translations } from "../data/translations";
+import { useAuth } from "../context/AuthContext";
 
 const Login = () => {
 
@@ -12,6 +13,9 @@ const Login = () => {
   const t = translations[language];
 
   const navigate = useNavigate();
+
+  // UPDATE GLOBAL AUTH STATE
+  const { setUser } = useAuth();
 
 const [formData, setFormData] = useState({
   email: "",
@@ -45,7 +49,13 @@ const handleSubmit = async (e) => {
     );
 
     if (response.data.success) {
-      navigate("/");
+
+     // UPDATE GLOBAL AUTH STATE
+     setUser(response.data.user);
+
+     // REDIRECT TO HOME
+    navigate("/");
+
     }
 
   } catch (error) {
