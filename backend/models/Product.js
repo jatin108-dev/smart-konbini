@@ -49,6 +49,11 @@ const productSchema = new mongoose.Schema({
 currency: {
   type: String,
   default: "JPY",
+
+  stock: {
+  type: Number,
+  default: 10,
+}
 },
 
 }, { timestamps: true });

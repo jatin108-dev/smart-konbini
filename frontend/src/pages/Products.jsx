@@ -3,11 +3,47 @@ import { motion } from "framer-motion";
 import { Link } from "react-router-dom";
 
 import { useLanguage } from "../context/LanguageContext";
-import { products } from "../data/products";
+// import { products } from "../data/products"; => Kyuki ab DB use karenge.
+import { useEffect, useState } from "react";
+import axios from "axios";
 
 const Products = () => {
 
   const { language } = useLanguage();
+  // PRODUCTS STATE
+const [products, setProducts] = useState([]);
+
+// LOADING STATE
+const [loading, setLoading] = useState(true);
+
+// FETCH PRODUCTS FROM BACKEND
+useEffect(() => {
+
+  const fetchProducts = async () => {
+
+    try {
+
+      const response = await axios.get(
+        "http://localhost:5000/api/products"
+      );
+
+      setProducts(response.data.products);
+
+    } catch (error) {
+
+      console.log(error);
+
+    } finally {
+
+      setLoading(false);
+
+    }
+
+  };
+
+  fetchProducts();
+
+}, []);
 
   return (
     <main className="min-h-screen bg-[#f6f1eb] overflow-x-hidden font-['Outfit']">
@@ -48,12 +84,16 @@ const Products = () => {
 
       {/* PRODUCTS */}
       <section className="px-6 md:px-20 pb-28">
-
+        {loading && (
+  <h2 className="text-center text-2xl font-bold">
+    Loading Products...
+  </h2>
+)}
         <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-8">
 
           {products.map((product, index) => (
             <motion.div
-              key={product.id}
+              key={product._id}
               initial={{ opacity: 0, y: 80 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: index * 0.1 }}
@@ -77,9 +117,7 @@ const Products = () => {
 
                   <p className="uppercase tracking-[4px] text-[#c75c5c] text-xs">
 
-                    {language === "en"
-                      ? product.categoryEn
-                      : product.categoryJp}
+                    {product.category}
 
                   </p>
 
@@ -88,13 +126,13 @@ const Products = () => {
                     <h2 className="text-2xl font-bold text-[#2b2b2b]">
 
                       {language === "en"
-                        ? product.titleEn
-                        : product.titleJp}
+                        ? product.name
+                        : product.japaneseName}
 
                     </h2>
 
                     <div className="bg-[#f6f1eb] px-4 py-2 rounded-full text-sm">
-                      {product.price}
+                      ¥{product.price}
                     </div>
 
                   </div>
