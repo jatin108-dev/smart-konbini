@@ -2,7 +2,9 @@ import Navbar from "../components/Navbar";
 import { useParams } from "react-router-dom";
 
 import { useLanguage } from "../context/LanguageContext";
-import { products } from "../data/products";
+//import { products } from "../data/products";
+import { useState, useEffect } from "react";
+import axios from "axios";
 
 const ProductDetails = () => {
 
@@ -10,11 +12,46 @@ const ProductDetails = () => {
 
   const { language } = useLanguage();
 
-  const product = products.find(
-    (item) => item.id === Number(id)
-  );
+const [product, setProduct] = useState(null);
+const [loading, setLoading] = useState(true);
 
-  if (!product) {
+useEffect(() => {
+
+  const fetchProduct = async () => {
+
+    try {
+
+      const response = await axios.get(
+        `http://localhost:5000/api/products/${id}`
+      );
+
+      setProduct(response.data.product);
+
+    } catch (error) {
+
+      console.log(error);
+
+    } finally {
+
+      setLoading(false);
+
+    }
+
+  };
+
+  fetchProduct();
+
+}, [id]);
+
+  if (loading) {
+  return (
+    <div className="min-h-screen flex items-center justify-center text-3xl">
+      Loading...
+    </div>
+  );
+}
+
+if (!product) {
     return (
       <div className="min-h-screen flex items-center justify-center text-3xl">
         Product Not Found
@@ -48,30 +85,24 @@ const ProductDetails = () => {
 
   <p className="uppercase tracking-[6px] text-[#c75c5c] text-xs">
 
-    {language === "en"
-      ? product.categoryEn
-      : product.categoryJp}
+      {product.category}
 
   </p>
 
   <h1 className="text-[55px] leading-[1] font-black text-[#2b2b2b] mt-6">
 
-    {language === "en"
-      ? product.titleEn
-      : product.titleJp}
+        {language === "en"
+        ? product.name
+        : product.japaneseName}
 
   </h1>
 
   <p className="text-3xl mt-8 font-semibold text-[#444]">
-    {product.price}
+    ¥{product.price}
   </p>
 
   <p className="mt-8 text-lg leading-relaxed text-[#666] max-w-xl">
-
-    {language === "en"
-      ? product.descEn
-      : product.descJp}
-
+    {product.description}
   </p>
 
   {/* TAGS */}

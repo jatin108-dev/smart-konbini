@@ -137,7 +137,7 @@ useEffect(() => {
 
                   </div>
 
-                  <Link to={`/products/${product.id}`}>
+                  <Link to={`/products/${product._id}`}>
 
                     <button className="mt-7 w-full bg-[#2b2b2b] text-white py-4 rounded-full hover:scale-[1.02] transition duration-300">
 
