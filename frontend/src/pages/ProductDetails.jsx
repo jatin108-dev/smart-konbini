@@ -73,9 +73,9 @@ if (!product) {
 
       <Navbar />
 
-      {/* SAKURA TOP LEFT */}
+      {/* SAKURA */}
 <div
-className="absolute inset-0 w-full h-full opacity-40 pointer-events-none"
+className="absolute inset-0 w-full h-full opacity-60 pointer-events-none"
   style={{
     backgroundImage:
       "url('https://images.unsplash.com/photo-1522383225653-ed111181a951?q=80&w=1200')",
@@ -83,17 +83,6 @@ className="absolute inset-0 w-full h-full opacity-40 pointer-events-none"
     backgroundPosition: "center",
   }}
 ></div>
-
-{/* JAPANESE WAVE TOP RIGHT */}
-{/* <div
-  className="absolute top-20 right-0 w-[350px] h-[350px] opacity-20 pointer-events-none"
-  style={{
-    backgroundImage:
-      "url('https://images.unsplash.com/photo-1528164344705-47542687000d?q=80&w=1200')",
-    backgroundSize: "cover",
-    backgroundPosition: "center",
-  }}
-></div> */}
 
       <section className="relative z-10 px-6 md:px-20 pt-36 pb-20">
 
@@ -113,7 +102,7 @@ className="absolute inset-0 w-full h-full opacity-40 pointer-events-none"
             <img
               src={product.image}
               alt=""
-              className="w-full h-[520px] object-cover rounded-[40px] shadow-[0_25px_60px_rgba(199,92,92,0.15)] border border-white"
+              className="w-full h-[560px] object-cover rounded-[40px] shadow-[0_25px_60px_rgba(199,92,92,0.15)] border border-white"
             />
 
           </div>
