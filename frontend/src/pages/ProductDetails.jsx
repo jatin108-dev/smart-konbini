@@ -5,12 +5,17 @@ import { useLanguage } from "../context/LanguageContext";
 //import { products } from "../data/products";
 import { useState, useEffect } from "react";
 import axios from "axios";
+// CART CONTEXT
+import { useCart } from "../context/CartContext";
 
 const ProductDetails = () => {
 
   const { id } = useParams();
 
   const { language } = useLanguage();
+
+  // GET ADD TO CART FUNCTION
+const { addToCart } = useCart();
 
 const [product, setProduct] = useState(null);
 const [loading, setLoading] = useState(true);
@@ -165,11 +170,13 @@ className="absolute inset-0 w-full h-full opacity-60 pointer-events-none"
   {/* BUTTONS */}
   <div className="flex gap-5 mt-12 flex-wrap">
 
-    <button className="bg-[#2b2b2b] text-white px-10 py-5 rounded-full hover:scale-105 transition">
+    <button
+  onClick={() => addToCart(product)}
+  className="bg-[#111111] text-white px-10 py-5 rounded-full hover:scale-105 transition shadow-lg">
 
       {language === "en"
-        ? "Reserve Product"
-        : "商品を予約"}
+      ? "🛒 Add To Cart"
+      : "カートに追加"}
 
     </button>
 

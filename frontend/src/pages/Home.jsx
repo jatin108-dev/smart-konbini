@@ -5,6 +5,7 @@ import BentoGrid from "../components/BentoGrid";
 import Footer from "../components/Footer";
 import { useAuth } from "../context/AuthContext";
 
+
 const Home = () => {
   const { user, loading } = useAuth();
   return (

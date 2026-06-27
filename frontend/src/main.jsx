@@ -4,14 +4,29 @@ import App from "./App";
 import "./index.css";
 
 import { LanguageProvider } from "./context/LanguageContext";
+// GLOBAL CART STATE
+import { CartProvider } from "./context/CartContext";
 import { AuthProvider } from "./context/AuthContext";
 
 ReactDOM.createRoot(document.getElementById("root")).render(
-  <React.StrictMode>
+<React.StrictMode>
+
+  {/* AUTH CONTEXT */}
   <AuthProvider>
+
+    {/* LANGUAGE CONTEXT */}
     <LanguageProvider>
-      <App />
+
+      {/* CART CONTEXT */}
+      <CartProvider>
+
+        <App />
+
+      </CartProvider>
+
     </LanguageProvider>
+
   </AuthProvider>
+
 </React.StrictMode>
 );
