@@ -6,6 +6,7 @@ const authRoutes = require("./routes/authRoutes");
 const userRoutes = require("./routes/userRoutes");
 const cookieParser = require("cookie-parser");
 const productRoutes = require("./routes/productRoutes");
+const cartRoutes = require("./routes/cartRoutes");
 
 dotenv.config();
 
@@ -25,6 +26,9 @@ app.use("/api/user", userRoutes);
 
 // PRODUCT ROUTES
 app.use("/api/products", productRoutes);
+
+// Cart Route
+app.use("/api/cart", cartRoutes);
 
 
 app.get("/", (req, res) => {

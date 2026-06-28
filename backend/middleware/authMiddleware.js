@@ -19,9 +19,13 @@ const authMiddleware = async (req, res, next) => {
       process.env.JWT_SECRET
     );
 
+    // const user = await User
+    //   .findById(decoded.id)
+    //   .select("name email role");
+
     const user = await User
-      .findById(decoded.id)
-      .select("name email role");
+  .findById(decoded.id)
+  .select("_id name email role");
 
     req.user = user;
 
