@@ -7,10 +7,13 @@ import TouristMode from "./pages/TouristMode";
 
 import Login from "./pages/Login";
 import Signup from "./pages/Signup";
+import Cart from "./pages/Cart";
+import { CartProvider } from "./context/CartContext";  
 
 function App() {
 
   return (
+    <CartProvider>
     <BrowserRouter>
 
       <Routes>
@@ -51,9 +54,16 @@ function App() {
           element={<Signup />}
         />
 
+        {/* CART */ }
+        <Route
+        path="/cart"
+        element={<Cart />}
+        />
+
       </Routes>
 
     </BrowserRouter>
+    </CartProvider>
   );
 }
 

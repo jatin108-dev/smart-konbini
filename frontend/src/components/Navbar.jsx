@@ -89,24 +89,28 @@ const Navbar = () => {
 
         </button>
 
-        {/* CART */}
-<button
-  className="relative bg-white border border-[#e8ddd2] px-4 py-3 rounded-full shadow-sm hover:scale-105 transition"
->
+{/* CART */}
+<Link to="/cart">
 
-  🛒
+  <button
+    className="relative bg-white border border-[#e8ddd2] px-4 py-3 rounded-full shadow-sm hover:scale-105 transition"
+  >
 
-  {cartItems.length > 0 && (
+    🛒
 
-    <span className="absolute -top-2 -right-2 bg-[#c75c5c] text-white text-xs w-6 h-6 rounded-full flex items-center justify-center">
+    {cartItems.length > 0 && (
 
-      {cartItems.length}
+      <span className="absolute -top-2 -right-2 bg-[#c75c5c] text-white text-xs w-6 h-6 rounded-full flex items-center justify-center">
 
-    </span>
+        {cartItems.length}
 
-  )}
+      </span>
 
-</button>
+    )}
+
+  </button>
+
+</Link>
 
         {/* LOGIN */}
       {user ? (
