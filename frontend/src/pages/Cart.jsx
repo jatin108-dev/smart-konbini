@@ -5,7 +5,7 @@ import { ShoppingBag, Trash2, ArrowRight } from "lucide-react";
 import { useCart } from "../context/CartContext";
 
 const Cart = () => {
-  const { cartItems, removeFromCart, clearCart } = useCart();
+  const { cartItems, removeFromCart, clearCart,increaseQuantity, decreaseQuantity,} = useCart();
 
   const total = cartItems.reduce(
     (sum, item) => sum + item.price * item.quantity,
@@ -102,21 +102,47 @@ const Cart = () => {
                       </div>
 
                       {/* Price + Qty + Remove */}
-                      <div className="mt-6 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+                      <div className="mt-6 flex flex-col lg:flex-row lg:items-center lg:justify-between gap-6">
 
                         <div>
                           <p className="text-sm text-gray-500">Price</p>
                           <h3 className="text-2xl sm:text-3xl font-black text-[#c75c5c]">
-                            ¥{item.price}
+                            ¥{item.price * item.quantity}
                           </h3>
                         </div>
 
                         <div>
-                          <p className="text-sm text-gray-500">Quantity</p>
-                          <h3 className="text-xl sm:text-2xl font-bold">
-                            {item.quantity}
-                          </h3>
-                        </div>
+
+  <p className="text-sm text-gray-500 mb-2">
+    Quantity
+  </p>
+
+  <div className="flex items-center gap-3">
+
+    {/* Minus */}
+    <button
+      onClick={() => decreaseQuantity(item._id)}
+      className="w-10 h-10 rounded-full border border-[#ddd] hover:bg-[#f5f5f5] transition text-xl font-bold"
+    >
+      −
+    </button>
+
+    {/* Quantity */}
+    <span className="text-xl font-bold w-8 text-center">
+      {item.quantity}
+    </span>
+
+    {/* Plus */}
+    <button
+      onClick={() => increaseQuantity(item._id)}
+      className="w-10 h-10 rounded-full border border-[#ddd] hover:bg-[#f5f5f5] transition text-xl font-bold"
+    >
+      +
+    </button>
+
+  </div>
+
+</div>
 
                         <button
                           onClick={() => removeFromCart(item._id)}
