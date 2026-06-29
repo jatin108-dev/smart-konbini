@@ -6,6 +6,7 @@ import { useLanguage } from "../context/LanguageContext";
 // import { products } from "../data/products"; => Kyuki ab DB use karenge.
 import { useEffect, useState } from "react";
 import axios from "axios";
+import { useCurrency } from "../context/CurrencyContext";
 
 const Products = () => {
 
@@ -15,6 +16,9 @@ const [products, setProducts] = useState([]);
 
 // LOADING STATE
 const [loading, setLoading] = useState(true);
+
+// CURRENCY
+const { currency, formatPrice } = useCurrency();
 
 // FETCH PRODUCTS FROM BACKEND
 useEffect(() => {
@@ -26,19 +30,15 @@ useEffect(() => {
       const response = await axios.get(
         "http://localhost:5000/api/products"
       );
-
       setProducts(response.data.products);
 
     } catch (error) {
-
       console.log(error);
 
     } finally {
-
       setLoading(false);
 
     }
-
   };
 
   fetchProducts();
@@ -131,9 +131,23 @@ useEffect(() => {
 
                     </h2>
 
-                    <div className="bg-[#f6f1eb] px-4 py-2 rounded-full text-sm">
-                      ¥{product.price}
-                    </div>
+<div className="bg-[#f6f1eb] px-4 py-2 rounded-full text-center">
+
+<p className="font-bold text-[#c75c5c]">
+  {formatPrice(product.price)}
+</p>
+
+  {currency !== "JPY" && (
+
+    <p className="text-[11px] text-gray-500 mt-1">
+
+      (~ ¥{product.price})
+
+    </p>
+
+  )}
+
+</div>
 
                   </div>
 

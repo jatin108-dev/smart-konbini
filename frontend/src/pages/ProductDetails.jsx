@@ -7,12 +7,14 @@ import { useState, useEffect } from "react";
 import axios from "axios";
 // CART CONTEXT
 import { useCart } from "../context/CartContext";
+import { useCurrency } from "../context/CurrencyContext";
 
 const ProductDetails = () => {
 
   const { id } = useParams();
 
-  const { language } = useLanguage();
+const { language } = useLanguage();
+const { currency, formatPrice } = useCurrency();
 
   // GET ADD TO CART FUNCTION
   const { addToCart } = useCart();
@@ -163,9 +165,19 @@ className="absolute inset-0 w-full h-full opacity-60 pointer-events-none"
 
   </h1>
 
-<p className="text-6xl mt-8 font-black text-[#d86f8a]">
-    ¥{product.price}
+<div className="mt-8">
+
+  <p className="text-6xl font-black text-[#d86f8a]">
+    {formatPrice(product.price)}
   </p>
+
+  {currency !== "JPY" && (
+    <p className="mt-2 text-gray-500 text-lg">
+      (~ ¥{product.price})
+    </p>
+  )}
+
+</div>
 
   <p className="mt-8 text-lg leading-relaxed text-[#666] max-w-xl">
     {product.description}

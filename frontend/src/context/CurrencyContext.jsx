@@ -9,24 +9,16 @@ export const CurrencyProvider = ({ children }) => {
 
   // DEFAULT CURRENCY
   const [currency, setCurrency] = useState(
-
     localStorage.getItem("currency") || "JPY"
-
   );
 
   // EXCHANGE RATES
   const [rates, setRates] = useState({
-
     JPY: 1,
-
     INR: 0,
-
     USD: 0,
-
     KRW: 0,
-
     CNY: 0,
-
   });
 
   // FETCH EXCHANGE RATES
@@ -77,30 +69,45 @@ export const CurrencyProvider = ({ children }) => {
 
   }, [currency]);
 
-  // CONVERT PRICE
-  const convertPrice = (priceJPY) => {
+// FORMAT PRICE
+const formatPrice = (priceJPY) => {
 
-    const converted = priceJPY * rates[currency];
+  // JPY
+  if (currency === "JPY") {
 
-    return converted.toFixed(2);
+    return `¥${priceJPY}`;
 
-  };
+  }
+
+  // INR
+  if (currency === "INR") {
+
+    return `₹${(priceJPY * rates.INR).toFixed(2)}`;
+
+  }
+
+  // USD
+  if (currency === "USD") {
+    return `$${(priceJPY * rates.USD).toFixed(2)}`;
+  }
+
+  // KRW
+  if (currency === "KRW") {
+    return `₩${Math.round(priceJPY * rates.KRW)}`;
+  }
+
+  // CNY
+  if (currency === "CNY") {
+    return `¥${(priceJPY * rates.CNY).toFixed(2)}`;
+  }
+
+  return `¥${priceJPY}`;
+
+};
 
   return (
-
     <CurrencyContext.Provider
-
-      value={{
-
-        currency,
-
-        setCurrency,
-
-        convertPrice,
-
-      }}
-
-    >
+      value={{ currency,setCurrency, formatPrice, }}>
 
       {children}
 

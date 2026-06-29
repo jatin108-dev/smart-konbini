@@ -5,6 +5,7 @@ import { translations } from "../data/translations";
 import { useAuth } from "../context/AuthContext";
 import axios from "axios";
 // import { useCart } from "../context/CartContext";
+import { useCurrency } from "../context/CurrencyContext";
 
 const Navbar = () => {
   const { language, toggleLanguage } = useLanguage();
@@ -15,6 +16,8 @@ const Navbar = () => {
   // CART COUNT
   const [cartCount, setCartCount] = useState(0);
   const [menuOpen, setMenuOpen] = useState(false);
+  // CURRENCY
+  const { currency, setCurrency } = useCurrency();
 
   const handleLogout = async () => {
     await logout();
@@ -115,6 +118,23 @@ useEffect(() => {
           {language === "en" ? "日本語" : "EN"}
         </button>
 
+        {/* CURRENCY - DESKTOP */}
+<div className="hidden lg:block">
+
+  <select
+    value={currency}
+    onChange={(e) => setCurrency(e.target.value)}
+    className="bg-white border border-[#e8ddd2] rounded-full px-4 py-3 text-sm shadow-sm hover:shadow-md transition outline-none cursor-pointer"
+  >
+    <option value="JPY">🇯🇵 JPY</option>
+    <option value="INR">🇮🇳 INR</option>
+    <option value="USD">🇺🇸 USD</option>
+    <option value="KRW">🇰🇷 KRW</option>
+    <option value="CNY">🇨🇳 CNY</option>
+  </select>
+
+</div>
+
         {/* CART */}
 <Link to="/cart">
   <button className="relative bg-white border border-[#e8ddd2] px-4 py-3 rounded-full shadow-sm hover:scale-105 transition">
@@ -178,6 +198,31 @@ useEffect(() => {
           </Link>
 
           <hr className="border-[#efe4d8]" />
+          {/* MOBILE CURRENCY */}
+
+<div className="flex flex-col gap-2">
+
+  <p className="text-sm font-medium text-[#666]">
+
+    🌍 Currency
+
+  </p>
+
+  <select
+    value={currency}
+    onChange={(e) => setCurrency(e.target.value)}
+    className="border border-[#e8ddd2] rounded-xl px-4 py-3 bg-white"
+  >
+    <option value="JPY">🇯🇵 JPY</option>
+    <option value="INR">🇮🇳 INR</option>
+    <option value="USD">🇺🇸 USD</option>
+    <option value="KRW">🇰🇷 KRW</option>
+    <option value="CNY">🇨🇳 CNY</option>
+  </select>
+
+</div>
+
+<hr className="border-[#efe4d8]" />
 
           {/* LANGUAGE TOGGLE */}
           <button
