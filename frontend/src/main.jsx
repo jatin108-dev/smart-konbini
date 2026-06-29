@@ -7,26 +7,28 @@ import { LanguageProvider } from "./context/LanguageContext";
 // GLOBAL CART STATE
 import { CartProvider } from "./context/CartContext";
 import { AuthProvider } from "./context/AuthContext";
+import { CurrencyProvider } from "./context/CurrencyContext";
 
 ReactDOM.createRoot(document.getElementById("root")).render(
 <React.StrictMode>
 
-  {/* AUTH CONTEXT */}
-  <AuthProvider>
+  <LanguageProvider>
 
-    {/* LANGUAGE CONTEXT */}
-    <LanguageProvider>
+    <CurrencyProvider>
 
-      {/* CART CONTEXT */}
       <CartProvider>
 
-        <App />
+        <AuthProvider>
+
+          <App />
+
+        </AuthProvider>
 
       </CartProvider>
 
-    </LanguageProvider>
+    </CurrencyProvider>
 
-  </AuthProvider>
+  </LanguageProvider>
 
 </React.StrictMode>
 );
