@@ -4,7 +4,8 @@ import { motion } from "framer-motion";
 import { ShoppingBag, Trash2, ArrowRight } from "lucide-react";
 import { useCart } from "../context/CartContext";
 import { useState, useEffect } from "react";
-import axios from "axios";
+// import axios from "axios";
+import api from "../api";
 import { useCurrency } from "../context/CurrencyContext";
 
 const Cart = () => {
@@ -22,10 +23,7 @@ const Cart = () => {
 const removeProduct = async (productId) => {
 
   try {
-    await axios.delete(
-      `http://localhost:5000/api/cart/remove/${productId}`,
-      { withCredentials: true,}
-    );
+   await api.delete(`/api/cart/remove/${productId}`);
 
     fetchCart();
   } catch (error) {
@@ -37,12 +35,7 @@ const removeProduct = async (productId) => {
 const increaseQuantity = async (productId) => {
 
   try {
-    await axios.put(
-      `http://localhost:5000/api/cart/increase/${productId}`,
-      {},
-      {withCredentials: true,}
-
-    );
+   await api.put(`/api/cart/increase/${productId}`, {});
 
     fetchCart();
   } catch (error) {
@@ -56,11 +49,7 @@ const decreaseQuantity = async (productId) => {
 
   try {
 
-    await axios.put(
-      `http://localhost:5000/api/cart/decrease/${productId}`,
-      {},
-      { withCredentials: true,}
-    );
+    await api.put(`/api/cart/decrease/${productId}`, {});
 
     fetchCart();
 
@@ -78,10 +67,7 @@ const clearCart = async () => {
 
   try {
 
-    await axios.delete(
-      "http://localhost:5000/api/cart/clear",
-      {withCredentials: true,}
-    );
+    await api.delete("/api/cart/clear");
 
     fetchCart();
 
@@ -94,10 +80,7 @@ const clearCart = async () => {
 const fetchCart = async () => {
 
   try {
-    const response = await axios.get(
-      "http://localhost:5000/api/cart",
-      { withCredentials: true, }
-    );
+    const response = await api.get("/api/cart");
 
 const items = response.data.cart.items.map((item) => ({
 

@@ -4,10 +4,11 @@ import { useParams } from "react-router-dom";
 import { useLanguage } from "../context/LanguageContext";
 //import { products } from "../data/products";
 import { useState, useEffect } from "react";
-import axios from "axios";
+// import axios from "axios";
 // CART CONTEXT
 import { useCart } from "../context/CartContext";
 import { useCurrency } from "../context/CurrencyContext";
+import api from "../api";
 
 const ProductDetails = () => {
 
@@ -28,10 +29,7 @@ useEffect(() => {
 
     try {
 
-      const response = await axios.get(
-        `http://localhost:5000/api/products/${id}`
-      );
-
+      const response = await api.get(`/api/products/${id}`);
       setProduct(response.data.product);
 
     } catch (error) {
@@ -55,9 +53,8 @@ const handleAddToCart = async () => {
 
   try {
 
-    const response = await axios.post(
-
-      "http://localhost:5000/api/cart/add",
+    const response = await api.post(
+       "/api/cart/add",
 
       {
         productId: product._id,

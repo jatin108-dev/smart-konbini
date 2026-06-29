@@ -3,7 +3,8 @@ import { useState, useEffect } from "react";
 import { useLanguage } from "../context/LanguageContext";
 import { translations } from "../data/translations";
 import { useAuth } from "../context/AuthContext";
-import axios from "axios";
+// import axios from "axios";
+import api from "../api";
 // import { useCart } from "../context/CartContext";
 import { useCurrency } from "../context/CurrencyContext";
 
@@ -38,18 +39,7 @@ const Navbar = () => {
   }
 
   try {
-
-    const response = await axios.get(
-
-      "http://localhost:5000/api/cart",
-
-      {
-
-        withCredentials: true,
-
-      }
-
-    );
+    const response = await api.get("/api/cart");
 
     const totalItems = response.data.cart.items.reduce(
 

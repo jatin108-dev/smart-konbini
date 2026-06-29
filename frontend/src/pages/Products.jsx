@@ -5,7 +5,8 @@ import { Link } from "react-router-dom";
 import { useLanguage } from "../context/LanguageContext";
 // import { products } from "../data/products"; => Kyuki ab DB use karenge.
 import { useEffect, useState } from "react";
-import axios from "axios";
+// import axios from "axios";
+import api from "../api";
 import { useCurrency } from "../context/CurrencyContext";
 
 const Products = () => {
@@ -27,9 +28,7 @@ useEffect(() => {
 
     try {
 
-      const response = await axios.get(
-        "http://localhost:5000/api/products"
-      );
+      const response = await api.get("/api/products");
       setProducts(response.data.products);
 
     } catch (error) {

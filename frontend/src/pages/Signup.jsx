@@ -2,7 +2,8 @@ import { motion } from "framer-motion";
 import { Link, useNavigate } from "react-router-dom";
 import { useState } from "react";
 import { useLanguage } from "../context/LanguageContext";
-import axios from "axios";
+// import axios from "axios";
+import api from "../api";
 
 const Signup = () => {
 
@@ -35,13 +36,7 @@ const handleSubmit = async (e) => {
     setLoading(true);
     setError("");
 
-    const response = await axios.post(
-  "http://localhost:5000/api/auth/signup",
-  formData,
-         {
-           withCredentials: true,
-         }
-    );
+      await api.post("/api/auth/signup", data);
 
     if (response.data.success) {
 

@@ -1,7 +1,8 @@
 import { motion } from "framer-motion";
 import { Link, useNavigate } from "react-router-dom";
 import { useState } from "react";
-import axios from "axios";
+// import axios from "axios";
+import api from "../api";
 import { useLanguage } from "../context/LanguageContext";
 import { translations } from "../data/translations";
 import { useAuth } from "../context/AuthContext";
@@ -40,13 +41,7 @@ const handleSubmit = async (e) => {
     setLoading(true);
     setError("");
 
-    const response = await axios.post(
-      "http://localhost:5000/api/auth/login",
-      formData,
-      {
-        withCredentials: true,
-      }
-    );
+      await api.post("/api/auth/login", data);
 
     if (response.data.success) {
 
