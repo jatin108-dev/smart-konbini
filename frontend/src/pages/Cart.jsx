@@ -5,90 +5,61 @@ import { ShoppingBag, Trash2, ArrowRight } from "lucide-react";
 import { useCart } from "../context/CartContext";
 import { useState, useEffect } from "react";
 import axios from "axios";
+import { useCurrency } from "../context/CurrencyContext";
 
 const Cart = () => {
   // const { cartItems, removeFromCart, clearCart,increaseQuantity, decreaseQuantity,} = useCart();
   const [cartItems, setCartItems] = useState([]);
   const [loading, setLoading] = useState(true);
+  const { currency, formatPrice } = useCurrency();
 
   useEffect(() => {
-
   fetchCart();
 
 }, []);
 
-// ===========================
 // REMOVE PRODUCT
-// ===========================
-
 const removeProduct = async (productId) => {
 
   try {
-
     await axios.delete(
-
       `http://localhost:5000/api/cart/remove/${productId}`,
-
-      {
-        withCredentials: true,
-      }
-
+      { withCredentials: true,}
     );
 
     fetchCart();
-
   } catch (error) {
-
     console.log(error);
-
   }
-
 };
 
 // INCREASE QUANTITY
 const increaseQuantity = async (productId) => {
 
   try {
-
     await axios.put(
-
       `http://localhost:5000/api/cart/increase/${productId}`,
-
       {},
-
-      {
-        withCredentials: true,
-      }
+      {withCredentials: true,}
 
     );
 
     fetchCart();
-
   } catch (error) {
-
     console.log(error);
-
   }
-
 };
 
 
 // DECREASE QUANTITY
-
 const decreaseQuantity = async (productId) => {
 
   try {
 
     await axios.put(
-
       `http://localhost:5000/api/cart/decrease/${productId}`,
-
       {},
-
-      {
-        withCredentials: true,
-      }
-
+      { withCredentials: true,}
     );
 
     fetchCart();
@@ -108,21 +79,14 @@ const clearCart = async () => {
   try {
 
     await axios.delete(
-
       "http://localhost:5000/api/cart/clear",
-
-      {
-        withCredentials: true,
-      }
-
+      {withCredentials: true,}
     );
 
     fetchCart();
 
   } catch (error) {
-
     console.log(error);
-
   }
 
 };
@@ -130,37 +94,24 @@ const clearCart = async () => {
 const fetchCart = async () => {
 
   try {
-
     const response = await axios.get(
-
       "http://localhost:5000/api/cart",
-
-      {
-        withCredentials: true,
-      }
-
+      { withCredentials: true, }
     );
 
 const items = response.data.cart.items.map((item) => ({
 
   ...item.product,
-
   quantity: item.quantity,
-
   productId: item.product._id,
 
 }));
 
     setCartItems(items);
-
   } catch (error) {
-
     console.log(error);
-
   } finally {
-
     setLoading(false);
-
   }
 
 };
@@ -173,17 +124,25 @@ const items = response.data.cart.items.map((item) => ({
   const grandTotal = total + shipping;
 
   return (
-    <main className="min-h-screen bg-gradient-to-br from-[#fffaf7] via-[#fff5f2] to-[#fdeff1] overflow-x-hidden">
+<main
+  className="relative min-h-screen overflow-x-hidden"
+  style={{
+    backgroundImage: `
+      linear-gradient(rgba(255,255,255,0.45), rgba(255,255,255,0.45)),
+      url('/cartBG.jpg')
+    `,
+    backgroundSize: "cover",
+    backgroundPosition: "center",
+    backgroundRepeat: "no-repeat",
+  }}
+>
+
       <Navbar />
 
       {loading && (
-
   <div className="text-center text-3xl pt-40">
-
     Loading Cart...
-
   </div>
-
 )}
       <section className="max-w-7xl mx-auto px-4 sm:px-6 md:px-10 pt-24 sm:pt-32 pb-20">
 
@@ -272,9 +231,17 @@ const items = response.data.cart.items.map((item) => ({
 
                         <div>
                           <p className="text-sm text-gray-500">Price</p>
-                          <h3 className="text-2xl sm:text-3xl font-black text-[#c75c5c]">
-                            ¥{item.price * item.quantity}
-                          </h3>
+                    <div>
+                        <h3 className="text-2xl sm:text-3xl font-black text-[#c75c5c]">
+                         {formatPrice(item.price * item.quantity)}
+                        </h3>
+                        {currency !== "JPY" && (
+                          <p className="text-xs text-gray-500 mt-1">
+                            (~ ¥{item.price * item.quantity})
+                           </p>
+                           )}
+                      </div>
+
                         </div>
 
                         <div>
@@ -339,22 +306,57 @@ const items = response.data.cart.items.map((item) => ({
 
               <div className="space-y-5 mt-8">
 
-                <div className="flex justify-between">
-                  <span className="text-gray-500">Subtotal</span>
-                  <span className="font-medium">¥{total}</span>
-                </div>
+<div className="flex justify-between items-start">
+  <span className="text-gray-500">Subtotal</span>
 
-                <div className="flex justify-between">
-                  <span className="text-gray-500">Shipping</span>
-                  <span className="font-medium">¥{shipping}</span>
-                </div>
+  <div className="text-right">
+    <p className="font-medium">{formatPrice(total)}</p>
+
+    {currency !== "JPY" && (
+      <p className="text-xs text-gray-500">
+        (~ ¥{total})
+      </p>
+    )}
+  </div>
+</div>
+
+<div className="flex justify-between items-start">
+  <span className="text-gray-500">Shipping</span>
+
+  <div className="text-right">
+    <p className="font-medium">
+      {formatPrice(shipping)}
+    </p>
+
+    {currency !== "JPY" ? (
+      <p className="text-xs text-gray-500">
+        (~ ¥{shipping})
+      </p>
+    ) : null}
+
+  </div>
+</div>
 
                 <hr className="border-[#efe4d8]" />
 
-                <div className="flex justify-between text-2xl font-black">
-                  <span>Total</span>
-                  <span className="text-[#c75c5c]">¥{grandTotal}</span>
-                </div>
+<div className="flex justify-between items-start">
+  <span className="text-2xl font-black">
+    Total
+  </span>
+
+  <div className="text-right">
+    <p className="text-2xl font-black text-[#c75c5c]">
+      {formatPrice(grandTotal)}
+    </p>
+
+    {currency !== "JPY" ? (
+      <p className="text-sm text-gray-500 font-medium">
+        (~ ¥{grandTotal})
+      </p>
+    ) : null}
+
+  </div>
+</div>
 
               </div>
 

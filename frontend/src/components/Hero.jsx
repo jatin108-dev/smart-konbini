@@ -9,7 +9,17 @@ const Hero = () => {
   const t = translations[language];
 
   return (
-    <section className="min-h-screen bg-[#f6f1eb] relative overflow-hidden flex items-center px-6 md:px-20">
+   <section
+  className="min-h-screen relative overflow-hidden flex items-center px-6 md:px-20"
+  style={{
+    backgroundImage: `
+      linear-gradient(rgba(255,245,247,0.35), rgba(255,245,247,0.35)),
+      url('/mountfuji.jpg')
+    `,
+    backgroundSize: "cover",
+    backgroundPosition: "center",
+  }}
+>
 
       {/* BLUR */}
       <div className="absolute top-[-120px] right-[-100px] w-[350px] h-[350px] bg-[#c75c5c] opacity-20 blur-3xl rounded-full"></div>
