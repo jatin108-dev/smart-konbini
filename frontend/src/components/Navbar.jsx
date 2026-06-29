@@ -1,9 +1,10 @@
 import { Link, useNavigate, useLocation } from "react-router-dom";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useLanguage } from "../context/LanguageContext";
 import { translations } from "../data/translations";
 import { useAuth } from "../context/AuthContext";
-import { useCart } from "../context/CartContext";
+import axios from "axios";
+// import { useCart } from "../context/CartContext";
 
 const Navbar = () => {
   const { language, toggleLanguage } = useLanguage();
@@ -11,7 +12,8 @@ const Navbar = () => {
   const navigate = useNavigate();
   const location = useLocation();
   const { user, logout } = useAuth();
-  const { cartItems } = useCart();
+  // CART COUNT
+  const [cartCount, setCartCount] = useState(0);
   const [menuOpen, setMenuOpen] = useState(false);
 
   const handleLogout = async () => {
@@ -20,6 +22,55 @@ const Navbar = () => {
   };
 
   const handleBack = () => navigate(-1);
+
+// FETCH CART COUNT 
+ const fetchCartCount = async () => {
+
+  if (!user) {
+
+    setCartCount(0);
+
+    return;
+
+  }
+
+  try {
+
+    const response = await axios.get(
+
+      "http://localhost:5000/api/cart",
+
+      {
+
+        withCredentials: true,
+
+      }
+
+    );
+
+    const totalItems = response.data.cart.items.reduce(
+
+      (sum, item) => sum + item.quantity,
+
+      0
+
+    );
+
+    setCartCount(totalItems);
+
+  } catch (error) {
+
+    console.log(error);
+
+  }
+
+};
+
+useEffect(() => {
+
+  fetchCartCount();
+
+}, [user, location.pathname]);
 
   const isHome = location.pathname === "/";
 
@@ -65,16 +116,18 @@ const Navbar = () => {
         </button>
 
         {/* CART */}
-        <Link to="/cart">
-          <button className="relative bg-white border border-[#e8ddd2] px-4 py-3 rounded-full shadow-sm hover:scale-105 transition">
-            🛒
-            {cartItems.length > 0 && (
-              <span className="absolute -top-2 -right-2 bg-[#c75c5c] text-white text-xs w-5 h-5 rounded-full flex items-center justify-center">
-                {cartItems.length}
-              </span>
-            )}
-          </button>
-        </Link>
+<Link to="/cart">
+  <button className="relative bg-white border border-[#e8ddd2] px-4 py-3 rounded-full shadow-sm hover:scale-105 transition">
+    🛒
+
+    {cartCount > 0 && (
+      <span className="absolute -top-2 -right-2 bg-[#c75c5c] text-white text-xs w-5 h-5 rounded-full flex items-center justify-center">
+        {cartCount}
+      </span>
+    )}
+
+  </button>
+</Link>
 
         {/* USER — desktop only */}
         {user ? (

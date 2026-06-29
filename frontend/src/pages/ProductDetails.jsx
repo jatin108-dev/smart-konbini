@@ -15,7 +15,7 @@ const ProductDetails = () => {
   const { language } = useLanguage();
 
   // GET ADD TO CART FUNCTION
-const { addToCart } = useCart();
+  const { addToCart } = useCart();
 
 const [product, setProduct] = useState(null);
 const [loading, setLoading] = useState(true);
@@ -47,6 +47,39 @@ useEffect(() => {
   fetchProduct();
 
 }, [id]);
+
+// ADD PRODUCT TO MONGODB CART
+const handleAddToCart = async () => {
+
+  try {
+
+    const response = await axios.post(
+
+      "http://localhost:5000/api/cart/add",
+
+      {
+        productId: product._id,
+      },
+
+      {
+        withCredentials: true,
+      }
+
+    );
+
+    console.log(response.data);
+
+    alert("Product Added Successfully!");
+
+  } catch (error) {
+
+    console.log(error);
+
+    alert(error.response?.data?.message || "Something went wrong.");
+
+  }
+
+};
 
   if (loading) {
   return (
@@ -170,15 +203,14 @@ className="absolute inset-0 w-full h-full opacity-60 pointer-events-none"
   {/* BUTTONS */}
   <div className="flex gap-5 mt-12 flex-wrap">
 
-    <button
-  onClick={() => addToCart(product)}
-  className="bg-[#111111] text-white px-10 py-5 rounded-full hover:scale-105 transition shadow-lg">
-
-      {language === "en"
-      ? "🛒 Add To Cart"
-      : "カートに追加"}
-
-    </button>
+<button
+  onClick={handleAddToCart}
+  className="bg-[#111111] text-white px-10 py-5 rounded-full hover:scale-105 transition shadow-lg"
+>
+  {language === "en"
+    ? "🛒 Add To Cart"
+    : "カートに追加"}
+</button>
 
     <button className="bg-white border border-[#e5d9cd] px-8 py-5 rounded-full hover:bg-[#f3ebe3] transition">
 

@@ -3,10 +3,167 @@ import { Link } from "react-router-dom";
 import { motion } from "framer-motion";
 import { ShoppingBag, Trash2, ArrowRight } from "lucide-react";
 import { useCart } from "../context/CartContext";
+import { useState, useEffect } from "react";
+import axios from "axios";
 
 const Cart = () => {
-  const { cartItems, removeFromCart, clearCart,increaseQuantity, decreaseQuantity,} = useCart();
+  // const { cartItems, removeFromCart, clearCart,increaseQuantity, decreaseQuantity,} = useCart();
+  const [cartItems, setCartItems] = useState([]);
+  const [loading, setLoading] = useState(true);
 
+  useEffect(() => {
+
+  fetchCart();
+
+}, []);
+
+// ===========================
+// REMOVE PRODUCT
+// ===========================
+
+const removeProduct = async (productId) => {
+
+  try {
+
+    await axios.delete(
+
+      `http://localhost:5000/api/cart/remove/${productId}`,
+
+      {
+        withCredentials: true,
+      }
+
+    );
+
+    fetchCart();
+
+  } catch (error) {
+
+    console.log(error);
+
+  }
+
+};
+
+// INCREASE QUANTITY
+const increaseQuantity = async (productId) => {
+
+  try {
+
+    await axios.put(
+
+      `http://localhost:5000/api/cart/increase/${productId}`,
+
+      {},
+
+      {
+        withCredentials: true,
+      }
+
+    );
+
+    fetchCart();
+
+  } catch (error) {
+
+    console.log(error);
+
+  }
+
+};
+
+
+// DECREASE QUANTITY
+
+const decreaseQuantity = async (productId) => {
+
+  try {
+
+    await axios.put(
+
+      `http://localhost:5000/api/cart/decrease/${productId}`,
+
+      {},
+
+      {
+        withCredentials: true,
+      }
+
+    );
+
+    fetchCart();
+
+  } catch (error) {
+
+    console.log(error);
+
+  }
+
+};
+
+
+// CLEAR CART
+const clearCart = async () => {
+
+  try {
+
+    await axios.delete(
+
+      "http://localhost:5000/api/cart/clear",
+
+      {
+        withCredentials: true,
+      }
+
+    );
+
+    fetchCart();
+
+  } catch (error) {
+
+    console.log(error);
+
+  }
+
+};
+
+const fetchCart = async () => {
+
+  try {
+
+    const response = await axios.get(
+
+      "http://localhost:5000/api/cart",
+
+      {
+        withCredentials: true,
+      }
+
+    );
+
+const items = response.data.cart.items.map((item) => ({
+
+  ...item.product,
+
+  quantity: item.quantity,
+
+  productId: item.product._id,
+
+}));
+
+    setCartItems(items);
+
+  } catch (error) {
+
+    console.log(error);
+
+  } finally {
+
+    setLoading(false);
+
+  }
+
+};
   const total = cartItems.reduce(
     (sum, item) => sum + item.price * item.quantity,
     0
@@ -19,6 +176,15 @@ const Cart = () => {
     <main className="min-h-screen bg-gradient-to-br from-[#fffaf7] via-[#fff5f2] to-[#fdeff1] overflow-x-hidden">
       <Navbar />
 
+      {loading && (
+
+  <div className="text-center text-3xl pt-40">
+
+    Loading Cart...
+
+  </div>
+
+)}
       <section className="max-w-7xl mx-auto px-4 sm:px-6 md:px-10 pt-24 sm:pt-32 pb-20">
 
         <motion.div
@@ -121,7 +287,7 @@ const Cart = () => {
 
     {/* Minus */}
     <button
-      onClick={() => decreaseQuantity(item._id)}
+      onClick={() => decreaseQuantity(item.productId)}
       className="w-10 h-10 rounded-full border border-[#ddd] hover:bg-[#f5f5f5] transition text-xl font-bold"
     >
       −
@@ -134,7 +300,7 @@ const Cart = () => {
 
     {/* Plus */}
     <button
-      onClick={() => increaseQuantity(item._id)}
+      onClick={() => increaseQuantity(item.productId)}
       className="w-10 h-10 rounded-full border border-[#ddd] hover:bg-[#f5f5f5] transition text-xl font-bold"
     >
       +
@@ -145,7 +311,7 @@ const Cart = () => {
 </div>
 
                         <button
-                          onClick={() => removeFromCart(item._id)}
+                          onClick={() =>removeProduct(item.productId)}
                           className="flex items-center justify-center gap-2 bg-red-50 text-red-600 px-6 py-3 rounded-full hover:bg-red-100 transition text-sm font-medium w-full sm:w-auto"
                         >
                           <Trash2 size={16} />

@@ -166,17 +166,25 @@ const seedProducts = async () => {
 
   try {
 
-    await mongoose.connect(process.env.MONGO_URI);
+   await mongoose.connect(process.env.MONGO_URI);
 
-    console.log("MongoDB Connected");
+console.log("MongoDB Connected");
 
-    await Product.deleteMany();
+const count = await Product.countDocuments();
+
+if (count === 0) {
 
     await Product.insertMany(products);
 
-    console.log(`${products.length} Products Inserted`);
+    console.log("Products Inserted");
 
-    process.exit();
+} else {
+
+    console.log("Products Already Exist");
+
+}
+
+process.exit();
 
   } catch (error) {
 
