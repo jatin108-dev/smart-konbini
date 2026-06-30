@@ -14,8 +14,9 @@ const app = express();
 app.use(cookieParser());
 
 const allowedOrigins = [
-  process.env.CLIENT_URL,
+  "http://localhost:5173", 
   "https://smart-konbini.vercel.app",
+  process.env.CLIENT_URL,
 ];
 
 app.use(
