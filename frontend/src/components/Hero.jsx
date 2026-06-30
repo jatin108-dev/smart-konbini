@@ -60,69 +60,7 @@ const Hero = () => {
 
         </motion.div>
 
-        {/* RIGHT */}
-        <motion.div
-          initial={{ opacity: 0, scale: 0.9 }}
-          animate={{ opacity: 1, scale: 1 }}
-          transition={{ duration: 0.8 }}
-          className="relative hidden md:flex justify-center items-center h-[600px]"
-        >
-
-          {/* BIG CARD */}
-          <div className="w-[320px] bg-white rounded-[35px] shadow-2xl overflow-hidden z-20">
-
-            <img
-              src="https://images.unsplash.com/photo-1515003197210-e0cd71810b5f"
-              alt=""
-              className="h-[380px] w-full object-cover"
-            />
-
-            <div className="p-6">
-
-              <p className="uppercase text-xs tracking-[5px] text-[#c75c5c]">
-                Trending
-              </p>
-
-              <h2 className="text-3xl font-bold mt-3 text-[#111111]">
-                Matcha Dessert
-              </h2>
-
-              <p className="text-gray-500 mt-3">
-                Tokyo’s favorite sweet pick loved by tourists.
-              </p>
-
-            </div>
-
-          </div>
-
-          {/* FLOATING CARD */}
-          <div className="absolute top-16 left-0 bg-[#111111] text-white p-6 rounded-[30px] shadow-xl rotate-[-8deg]">
-
-            <h2 className="text-4xl font-black">
-              24/7
-            </h2>
-
-            <p className="mt-2 text-gray-300 text-sm">
-              Smart convenience
-            </p>
-
-          </div>
-
-          {/* FLOATING BADGE */}
-          <div className="absolute bottom-10 right-0 bg-white p-5 rounded-[25px] shadow-xl rotate-[8deg]">
-
-            <p className="text-sm text-[#c75c5c] uppercase tracking-widest">
-              Must Try
-            </p>
-
-            <h2 className="font-bold text-xl mt-2">
-              Egg Sandwich
-            </h2>
-
-          </div>
-
-        </motion.div>
-
+        
       </div>
 
     </section>
