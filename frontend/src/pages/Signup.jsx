@@ -36,13 +36,14 @@ const handleSubmit = async (e) => {
     setLoading(true);
     setError("");
 
-      await api.post("/api/auth/signup", data);
+const response = await api.post(
+  "/api/auth/signup",
+  formData
+);
 
-    if (response.data.success) {
-
-      navigate("/");
-
-    }
+if (response.data.success) {
+  navigate("/");
+}
 
   } catch (error) {
 

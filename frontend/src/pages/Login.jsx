@@ -41,17 +41,15 @@ const handleSubmit = async (e) => {
     setLoading(true);
     setError("");
 
-      await api.post("/api/auth/login", data);
+const response = await api.post(
+  "/api/auth/login",
+  formData
+);
 
-    if (response.data.success) {
-
-     // UPDATE GLOBAL AUTH STATE
-     setUser(response.data.user);
-
-     // REDIRECT TO HOME
-    navigate("/");
-
-    }
+if (response.data.success) {
+  setUser(response.data.user);
+  navigate("/");
+}
 
   } catch (error) {
 
